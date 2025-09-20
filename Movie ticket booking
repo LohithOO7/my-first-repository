@@ -22,7 +22,6 @@
       font-size: 2em;
       color: #facc15;
     }
-
     nav a {
       color: #f8fafc;
       text-decoration: none;
@@ -64,7 +63,7 @@
       background: #facc15; /* yellow - selected */
     }
     .seat.booked {
-      background: #dc2626; /* red - already booked */
+      background: #dc2626; /* red - booked */
       cursor: not-allowed;
     }
 
@@ -77,9 +76,38 @@
       display: inline-block;
       margin: 0 15px;
     }
+
+    /* Booking Form */
+    .booking-form {
+      background: #1e293b;
+      padding: 30px;
+      margin: 40px auto;
+      max-width: 600px;
+      border-radius: 10px;
+      text-align: left;
+    }
+    .booking-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #facc15;
+    }
+    .booking-form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    .booking-form input,
+    .booking-form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 6px;
+    }
     .confirm-btn {
       margin-top: 20px;
-      padding: 12px 25px;
+      padding: 12px;
+      width: 100%;
       font-size: 1em;
       font-weight: bold;
       background: #facc15;
@@ -89,6 +117,19 @@
     }
     .confirm-btn:hover {
       background: #eab308;
+    }
+
+    /* Confirmation */
+    .confirmation {
+      display: none;
+      text-align: center;
+      margin: 20px auto;
+      padding: 20px;
+      background: #16a34a;
+      border-radius: 10px;
+      max-width: 600px;
+      color: #fff;
+      font-weight: bold;
     }
 
     footer {
@@ -106,10 +147,11 @@
     <h1>🎬 Movie Ticket Booking</h1>
     <nav>
       <a href="#seats">Select Seats</a>
-      <a href="#contact">Contact</a>
+      <a href="#booking">Booking Form</a>
     </nav>
   </header>
 
+  <!-- Seat Selection -->
   <div class="container" id="seats">
     <h2>Select Your Seats</h2>
     <div class="screen"></div>
@@ -126,7 +168,7 @@
       <div class="seat"></div>
       <div class="seat"></div>
 
-      <!-- More rows (copy-paste as needed) -->
+      <!-- Row 2 -->
       <div class="seat"></div>
       <div class="seat"></div>
       <div class="seat"></div>
@@ -145,26 +187,89 @@
       <span>🟥 Booked</span>
       <p id="count">Selected Seats: 0</p>
     </div>
-    <button class="confirm-btn">Confirm Booking</button>
   </div>
 
-  <footer id="contact">
+  <!-- Booking Form -->
+  <section class="booking-form" id="booking">
+    <h2>Booking Details</h2>
+    <form id="bookingForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+
+      <label for="movie">Movie:</label>
+      <select id="movie" required>
+        <option value="">-- Select Movie --</option>
+        <option>Avengers: Endgame</option>
+        <option>Inception</option>
+        <option>The Batman</option>
+      </select>
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" required>
+
+      <button type="submit" class="confirm-btn">Confirm Booking</button>
+    </form>
+  </section>
+
+  <!-- Confirmation -->
+  <div class="confirmation" id="confirmationBox">
+    ✅ Booking Confirmed! <br>
+    <span id="summary"></span>
+  </div>
+
+  <footer>
     <p>&copy; 2025 Movie Booking. All Rights Reserved.</p>
-    <p>Email: support@movietickets.com</p>
   </footer>
 
   <script>
     const seats = document.querySelectorAll('.seat:not(.booked)');
     const count = document.getElementById('count');
+    const bookingForm = document.getElementById('bookingForm');
+    const confirmationBox = document.getElementById('confirmationBox');
+    const summary = document.getElementById('summary');
 
-    let selectedCount = 0;
+    let selectedSeats = [];
 
-    seats.forEach(seat => {
+    // Seat selection
+    seats.forEach((seat, index) => {
       seat.addEventListener('click', () => {
         seat.classList.toggle('selected');
-        selectedCount = document.querySelectorAll('.seat.selected').length;
-        count.textContent = "Selected Seats: " + selectedCount;
+        if (seat.classList.contains('selected')) {
+          selectedSeats.push(index + 1);
+        } else {
+          selectedSeats = selectedSeats.filter(s => s !== index + 1);
+        }
+        count.textContent = "Selected Seats: " + selectedSeats.length;
       });
+    });
+
+    // Form submission
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (selectedSeats.length === 0) {
+        alert("Please select at least one seat!");
+        return;
+      }
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const movie = document.getElementById('movie').value;
+      const date = document.getElementById('date').value;
+
+      summary.innerHTML = `
+        Name: ${name} <br>
+        Email: ${email} <br>
+        Movie: ${movie} <br>
+        Date: ${date} <br>
+        Seats: ${selectedSeats.join(", ")}
+      `;
+      confirmationBox.style.display = "block";
+      bookingForm.reset();
+      seats.forEach(seat => seat.classList.remove('selected'));
+      selectedSeats = [];
+      count.textContent = "Selected Seats: 0";
     });
   </script>
 
