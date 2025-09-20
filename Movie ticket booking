@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Ticket Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2em;
+      color: #facc15;
+    }
+
+    nav a {
+      color: #f8fafc;
+      text-decoration: none;
+      margin: 0 15px;
+    }
+    nav a:hover {
+      color: #facc15;
+    }
+
+    /* Seat Layout */
+    .container {
+      width: 80%;
+      margin: 40px auto;
+      text-align: center;
+    }
+    .screen {
+      background: #fff;
+      height: 40px;
+      width: 100%;
+      margin: 20px auto;
+      border-radius: 5px;
+    }
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+    .seat {
+      width: 25px;
+      height: 25px;
+      background: #16a34a; /* green - available */
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .seat.selected {
+      background: #facc15; /* yellow - selected */
+    }
+    .seat.booked {
+      background: #dc2626; /* red - already booked */
+      cursor: not-allowed;
+    }
+
+    /* Booking Info */
+    .info {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .info span {
+      display: inline-block;
+      margin: 0 15px;
+    }
+    .confirm-btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1em;
+      font-weight: bold;
+      background: #facc15;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .confirm-btn:hover {
+      background: #eab308;
+    }
+
+    footer {
+      text-align: center;
+      background: #1e293b;
+      padding: 20px;
+      margin-top: 40px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🎬 Movie Ticket Booking</h1>
+    <nav>
+      <a href="#seats">Select Seats</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="container" id="seats">
+    <h2>Select Your Seats</h2>
+    <div class="screen"></div>
+    <div class="seats">
+      <!-- Example: 50 seats -->
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat booked"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat booked"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+
+      <!-- More rows (copy-paste as needed) -->
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat booked"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+      <div class="seat"></div>
+    </div>
+
+    <div class="info">
+      <span>🟩 Available</span>
+      <span>🟨 Selected</span>
+      <span>🟥 Booked</span>
+      <p id="count">Selected Seats: 0</p>
+    </div>
+    <button class="confirm-btn">Confirm Booking</button>
+  </div>
+
+  <footer id="contact">
+    <p>&copy; 2025 Movie Booking. All Rights Reserved.</p>
+    <p>Email: support@movietickets.com</p>
+  </footer>
+
+  <script>
+    const seats = document.querySelectorAll('.seat:not(.booked)');
+    const count = document.getElementById('count');
+
+    let selectedCount = 0;
+
+    seats.forEach(seat => {
+      seat.addEventListener('click', () => {
+        seat.classList.toggle('selected');
+        selectedCount = document.querySelectorAll('.seat.selected').length;
+        count.textContent = "Selected Seats: " + selectedCount;
+      });
+    });
+  </script>
+
+</body>
+</html>
